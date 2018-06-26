@@ -193,7 +193,7 @@ float QuadControl::AltitudeControl(float posZCmd, float velZCmd, float posZ, flo
  - Tuned parameters `kpPosXY` and  `kpVelXY`
  - Tuned parameters `kpPosZ` and `kpVelZ`
 
-If found it difficult to tune `kpPosZ` and `kpVelZ` with the supplied scenarios, so I wrote `6_Vertical.txt`. With it, I was able to move a quad vertically several meters and stop it to observe the overshoot.  I could then eliminate the overshoot while still agressively moving toward the trajectory point.
+If found it difficult to tune `kpPosZ` and `kpVelZ` with the supplied scenarios, so I wrote `6_Vertical.txt`. With it, I was able to move a quad vertically several meters and stop it to observe the overshoot.  I could then eliminate the overshoot while still aggressively moving toward the trajectory point.
 
 Similarly, I wrote `7_Horizontal.txt` to tune `kpPosXY` and  `kpVelXY`.  However, I found that the strong values I tuned had to be relaxed later in scenario 5 when the trajectory point is moving.
 
