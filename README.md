@@ -62,7 +62,7 @@ Implemented the body rate and roll / pitch control.
 **Implemented body rate control**
 
  - implemented the code in the function `GenerateMotorCommands()`
-   
+ '''c++
     VehicleCommand QuadControl::GenerateMotorCommands(float collThrustCmd, V3F momentCmd)
 
     float l = L / (float)sqrt(2);
@@ -85,11 +85,17 @@ Implemented the body rate and roll / pitch control.
     //cmd.desiredThrustsN[1] = mass * 9.81f / 4.f; // front right
     //cmd.desiredThrustsN[2] = mass * 9.81f / 4.f; // rear left
     //cmd.desiredThrustsN[3] = mass * 9.81f / 4.f; // rear right
- 
- 
+    
+    return cmd;
+ '''
  - implement the code in the function `BodyRateControl()`
+ V3F QuadControl::BodyRateControl(V3F pqrCmd, V3F pqr)
  
+   V3F MOI = (Ixx, Iyy, Izz);
  
+  V3F rate_error = pqrCmd - pqr;
+
+  momentCmd = MOI * (kpPQR * rate_error); 
  
  - Tuned `kpPQR` in `QuadControlParams.txt` to get the vehicle to stop spinning quickly but not overshoot
 
