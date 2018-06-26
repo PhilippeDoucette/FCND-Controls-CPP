@@ -1,0 +1,64 @@
+# Hover at the initial point using full 3D control
+
+INCLUDE QuadPhysicalParams.txt
+
+# simulation setup
+Sim.RunMode = Repeat
+Sim.EndTime = 2
+Sim.Vehicle1 = Quad1
+Sim.Vehicle2 = Quad2 
+Sim.Vehicle3 = Quad3
+
+# Controller selection
+Quad.ControlType = QuadControl
+Quad.ControlConfig = QuadControlParams
+
+# reference trajectory (finish)
+QuadControlParams.Trajectory=0,0,-2
+
+# initial conditions
+Quad.InitialVel=0,0,0
+Quad.InitialYPR=0,0,0
+Quad.InitialOmega=0,0,0
+
+# graphing commands
+# Quad 1 Red
+Commands.1=AddGraph1.Quad1.Pos.PosFollowErr
+Commands.3=AddGraph1.Quad1.Pos.Z
+Commands.4=AddGraph2.Quad1.Pos.Z
+
+# Quad  2 Yellow
+Commands.5=AddGraph2.Quad2.Pos.Z
+Commands.6=AddGraph2.Quad3.Pos.Z
+
+Commands.7=Toggle.RefTrajectory
+Commands.8=Toggle.ActualTrajectory
+
+INCLUDE QuadControlParams.txt
+INCLUDE Simulation.txt
+
+# Red
+[Quad1:Quad]
+InitialPos=0,-1,-1  # Start Position
+InitialYPR= 0,0,0
+TrajectoryOffset=0,-1,0  # Move the end point
+
+# Yellow
+[Quad2:Quad]
+InitialPos=0,0,-1 # Start Position
+InitialYPR= 0,0,0
+TrajectoryOffset=0,0,0  # Move the end point
+Mass = .8
+
+# Green
+[Quad3:Quad]
+InitialPos=0,1,-1 # Start Position
+InitialYPR= 0,0,0
+TrajectoryOffset=0,1,0  # Move the end point
+cy=-.05
+
+# Adjust position control here
+#[QuadControlParams]
+#kpPosZ = 3 # initial 1 max 4
+#kpVelZ = 12 # initial 4 max 16
+#KiPosZ =40 # initial 20 max 80
