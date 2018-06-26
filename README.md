@@ -166,7 +166,7 @@ Successful, as the quad leveled itself, and the vehicle angle (Roll) gets contro
 } 
 ```
  - Implemented the code in the function `AltitudeControl()`
-  ```c++
+```c++
 float QuadControl::AltitudeControl(float posZCmd, float velZCmd, float posZ, float velZ, Quaternion<float> attitude, float accelZCmd, float dt)float QuadControl::AltitudeControl(float posZCmd, float velZCmd, float posZ, float velZ, Quaternion<float> attitude, float accelZCmd, float dt)
 {
   Mat3x3F R = attitude.RotationMatrix_IwrtB();   
@@ -187,7 +187,7 @@ float QuadControl::AltitudeControl(float posZCmd, float velZCmd, float posZ, flo
   else if (thrust < minMotorThrust * 4)
 	   thrust = minMotorThrust * 4;
 
-return thrust;
+  return thrust;
 }
 ```
  - Tuned parameters `kpPosXY` and  `kpVelXY`
