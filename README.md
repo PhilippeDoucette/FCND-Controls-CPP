@@ -165,24 +165,64 @@ Successful, as the quad leveled itself, and the vehicle angle (Roll) gets contro
   return accelCmd;
 } 
 ```
- 
- 
  - Implemented the code in the function `AltitudeControl()`
- - Tuned parameters `kpPosXY` and `kpPosZ`
- - Tune parameters `kpVelXY` and `kpVelZ`
+  ```c++
+float QuadControl::AltitudeControl(float posZCmd, float velZCmd, float posZ, float velZ, Quaternion<float> attitude, float accelZCmd, float dt)float QuadControl::AltitudeControl(float posZCmd, float velZCmd, float posZ, float velZ, Quaternion<float> attitude, float accelZCmd, float dt)
+{
+  Mat3x3F R = attitude.RotationMatrix_IwrtB();   
+  float thrust = 0;
+  
+  velZCmd = kpPosZ * (posZCmd - posZ) + velZCmd;
 
-If successful, the quads should be going to their destination points and tracking error should be going down (as shown below). However, one quad remains rotated in yaw.
+  // Limit the ascent / descent rate
+  velZCmd = CONSTRAIN(velZCmd, -maxDescentRate, maxAscentRate);
 
- - implement the code in the function `YawControl()`
- - tune parameters `kpYaw` and the 3rd (z) component of `kpPQR`
+  integratedAltitudeError += (posZCmd - posZ) * dt;
+  accelZCmd = kpVelZ * (velZCmd - velZ) + KiPosZ * integratedAltitudeError + accelZCmd;
 
-Tune position control for settling time. Don’t try to tune yaw control too tightly, as yaw control requires a lot of control authority from a quadcopter and can really affect other degrees of freedom.  This is why you often see quadcopters with tilted motors, better yaw authority!
+  thrust = mass * (9.81f -accelZCmd) / R(2, 2);  
+
+  if (thrust > maxMotorThrust * 4)
+	   thrust = maxMotorThrust * 4;
+  else if (thrust < minMotorThrust * 4)
+	   thrust = minMotorThrust * 4;
+
+return thrust;
+}
+```
+ - Tuned parameters `kpPosXY` and  `kpVelXY`
+ - Tuned parameters `kpPosZ` and `kpVelZ`
+
+If found it difficult to tune `kpPosZ` and `kpVelZ` with the supplied scenarios, so I wrote `6_Vertical.txt`. With it, I was able to move a quad vertically several meters and stop it to observe the overshoot.  I could then eliminate the overshoot while still agressively moving toward the trajectory point.
+
+Similarly, I wrote `7_Horizontal.txt` to tune `kpPosXY` and  `kpVelXY`.  However, I found that the strong values I tuned had to be relaxed later in scenario 5 when the trajectory point is moving.
+
+At this point in scenario 3, without yaw control, one quad remained rotated in yaw.
+
+ - Implement the code in the function `YawControl()`
+ ```c++
+float QuadControl::YawControl(float yawCmd, float yaw)
+{
+  float yawRateCmd = 0;
+   
+ 	float PI = (float)M_PI;
+  yawCmd = fmodf(yawCmd, 2.f * PI);
+  float yawRateError = yawCmd - yaw;
+
+  if (yawRateError > M_PI)
+		  yawRateError = yawRateError - 2.f*PI;
+  else if(yawRateError < -M_PI)
+		  yawRateError = yawRateError + 2.f*PI;
+
+	 yawRateCmd= kpYaw * yawRateError;
+}
+ 
+ ```
+ - Tuned parameters `kpYaw` and the 3rd (z) component of `kpPQR`
 
 <p align="center">
-<img src="animations/scenario3.gif" width="500"/>
+<img src="animations/scenario3.jpg" width="500"/>
 </p>
-
-**Hint:**  For a second order system, such as the one for this quadcopter, the velocity gain (`kpVelXY` and `kpVelZ`) should be at least ~3-4 times greater than the respective position gain (`kpPosXY` and `kpPosZ`).
 
 ### Non-idealities and robustness (scenario 4) ###
 
@@ -236,8 +276,7 @@ All performance metrics were accomplished:
  - scenario 3
    - X position of both drones should be within 0.1 meters of the target for at least 1.25 seconds
    - Quad2 yaw should be within 0.1 of the target for at least 1 second
-
-
+ 
  - scenario 4
    - position error for all 3 quads should be less than 0.1 meters for at least 1.5 seconds
 
