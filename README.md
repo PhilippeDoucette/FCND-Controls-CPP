@@ -89,6 +89,7 @@ Implemented the body rate and roll / pitch control.
     return cmd;
 ```
  - implement the code in the function `BodyRateControl()`
+```c++
  V3F QuadControl::BodyRateControl(V3F pqrCmd, V3F pqr)
  
    V3F MOI = (Ixx, Iyy, Izz);
@@ -96,6 +97,9 @@ Implemented the body rate and roll / pitch control.
   V3F rate_error = pqrCmd - pqr;
 
   momentCmd = MOI * (kpPQR * rate_error); 
+  
+  return momentCmd; 
+  ```
  
  - Tuned `kpPQR` in `QuadControlParams.txt` to get the vehicle to stop spinning quickly but not overshoot
 
