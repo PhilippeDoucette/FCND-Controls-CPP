@@ -58,10 +58,9 @@ This code was later commented out and replaced with controller code.
 
 Implemented the body rate and roll / pitch control. 
 
-
 **Implemented body rate control**
 
- - implemented the code in the function `GenerateMotorCommands()`
+ - Implemented the code in the function `GenerateMotorCommands()`
 ```c++
 VehicleCommand QuadControl::GenerateMotorCommands(float collThrustCmd, V3F momentCmd)
 {
@@ -89,7 +88,7 @@ VehicleCommand QuadControl::GenerateMotorCommands(float collThrustCmd, V3F momen
   return cmd;
 }
 ```
- - implement the code in the function `BodyRateControl()`
+ - Implement the code in the function `BodyRateControl()`
 ```c++
 V3F QuadControl::BodyRateControl(V3F pqrCmd, V3F pqr)
  
@@ -103,11 +102,23 @@ V3F QuadControl::BodyRateControl(V3F pqrCmd, V3F pqr)
  
  - Tuned `kpPQR` in `QuadControlParams.txt` to get the vehicle to stop spinning quickly but not overshoot
 
-
-
 **Implement roll / pitch control**
 
- - implemented the code in the function `RollPitchControl()`
+ - Implemented the code in the function `RollPitchControl()`
+```c++
+V3F QuadControl::RollPitchControl(V3F accelCmd, Quaternion<float> attitude, float collThrustCmd)
+  V3F pqrCmd;
+  Mat3x3F R = attitude.RotationMatrix_IwrtB();
+
+  float target_R13 = -CONSTRAIN(accelCmd[0] / c_d, -maxTiltAngle, maxTiltAngle);
+  float target_R23 = -CONSTRAIN(accelCmd[1] / c_d, -maxTiltAngle, maxTiltAngle);
+
+  pqrCmd[0] = (1 / R(2, 2)) * (-R(1, 0) * kpBank * (R(0, 2) - target_R13) + R(0, 0) * kpBank * (R(1, 2) - target_R23));
+  pqrCmd[1] = (1 / R(2, 2)) * (-R(1, 1) * kpBank * (R(0, 2) - target_R13) + R(0, 1) * kpBank * (R(1, 2) - target_R23));
+
+  return pqrCmd;
+}
+  ```
  - Tuned `kpBank` in `QuadControlParams.txt` to minimize settling time but avoid too much overshoot
 
 Successful, as the quad leveled itself, though it’ll still be flying away slowly since we’re not controlling velocity/position!  The vehicle angle (Roll) gets controlled to 0.
