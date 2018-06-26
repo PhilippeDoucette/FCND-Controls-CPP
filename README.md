@@ -243,9 +243,9 @@ float QuadControl::YawControl(float yawCmd, float yaw)
 
 ### Extra Challenge 1 (Optional) ###
 
-`You will notice that initially these two trajectories are the same. Let's work on improving some performance of the trajectory itself.
+"You will notice that initially these two trajectories are the same. Let's work on improving some performance of the trajectory itself.
 
-1. Inspect the python script ``traj/MakePeriodicTrajectory.py``.  Can you figure out a way to generate a trajectory that has velocity (not just position) information?`
+1. Inspect the python script `traj/MakePeriodicTrajectory.py`.  Can you figure out a way to generate a trajectory that has velocity (not just position) information?"
 
 The code could be modified to return velocity by simply remembering x,y,z from prior loop iterations and calculating dx, dy, dz and calculating velocities using dt.   Like this: vel.x = (prior_x - x) * dt.
 
@@ -269,8 +269,8 @@ So it already had velocity data in it.  I mearly added it to the velocity comman
   LateralPositionControl(curTrajPoint.position, curTrajPoint.velocity, estPos, estVel, curTrajPoint.accel);
 ```
 
-`2. Generate a new `FigureEightFF.txt` that has velocity terms
-Did the velocity-specified trajectory make a difference? Why?`
+"2. Generate a new `FigureEightFF.txt` that has velocity terms
+Did the velocity-specified trajectory make a difference? Why?"
 
 Yes, it made a huge difference.  The quad was not able to track trajectory closer then about 1/2 meter, no matter how I adjusted the parameters.  Adding the trajectory velocity to the command enabled very close tracking, within the performance criteria.
 
