@@ -122,7 +122,7 @@ V3F QuadControl::RollPitchControl(V3F accelCmd, Quaternion<float> attitude, floa
   ```
  - Tuned `kpBank` in `QuadControlParams.txt` to minimize settling time but avoid too much overshoot
 
-Successful, as the quad leveled itself, though it’ll still be flying away slowly since we’re not controlling velocity/position!  The vehicle angle (Roll) gets controlled to 0.
+Successful, as the quad leveled itself, and the vehicle angle (Roll) gets controlled to 0.
 
 <p align="center">
 <img src="animations/scenario2.jpg" width="500"/>
@@ -131,12 +131,45 @@ Successful, as the quad leveled itself, though it’ll still be flying away slow
 
 ### Position/velocity and yaw angle control (scenario 3) ###
 
-Next, you will implement the position, altitude and yaw control for your quad.  For the simulation, you will use `Scenario 3`.  This will create 2 identical quads, one offset from its target point (but initialized with yaw = 0) and second offset from target point but yaw = 45 degrees.
+ - Implemented the code in the function `LateralPositionControl()`
+ ```c++
+ V3F QuadControl::LateralPositionControl(V3F posCmd, V3F velCmd, V3F pos, V3F vel, V3F accelCmdFF)
+{
+  accelCmdFF.z = 0;
+  velCmd.z = 0;
+  posCmd.z = pos.z;
+  
+  V3F accelCmd = accelCmdFF;
 
- - implement the code in the function `LateralPositionControl()`
- - implement the code in the function `AltitudeControl()`
- - tune parameters `kpPosZ` and `kpPosZ`
- - tune parameters `kpVelXY` and `kpVelZ`
+  velCmd.x = kpPosXY * (posCmd.x - pos.x) + velCmd.x;
+  velCmd.y = kpPosXY * (posCmd.y - pos.y) + velCmd.y;
+
+  //Limit speed
+  float velocity_norm = sqrt(velCmd.x* velCmd.x + velCmd.y * velCmd.y);
+  if (velocity_norm > maxSpeedXY)
+  {
+    velCmd.x = velCmd.x * maxSpeedXY / velocity_norm;
+    velCmd.y = velCmd.y * maxSpeedXY / velocity_norm;
+  }
+
+  accelCmd = accelCmdFF + kpPosXY * (posCmd - pos) + kpVelXY * (velCmd - vel);
+
+  //Limit acceleration
+  float accel_norm = sqrt(accelCmd.x* accelCmd.x + accelCmd.y * accelCmd.y);
+  if (accel_norm > maxAccelXY)
+  {
+    accelCmd.x = accelCmd.x * maxAccelXY / accel_norm;
+    accelCmd.y = accelCmd.y * maxAccelXY / accel_norm;
+  }
+  
+  return accelCmd;
+} 
+```
+ 
+ 
+ - Implemented the code in the function `AltitudeControl()`
+ - Tuned parameters `kpPosXY` and `kpPosZ`
+ - Tune parameters `kpVelXY` and `kpVelZ`
 
 If successful, the quads should be going to their destination points and tracking error should be going down (as shown below). However, one quad remains rotated in yaw.
 
