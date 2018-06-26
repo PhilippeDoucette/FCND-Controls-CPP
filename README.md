@@ -91,7 +91,7 @@ VehicleCommand QuadControl::GenerateMotorCommands(float collThrustCmd, V3F momen
  - Implement the code in the function `BodyRateControl()`
 ```c++
 V3F QuadControl::BodyRateControl(V3F pqrCmd, V3F pqr)
- 
+{
   V3F MOI = (Ixx, Iyy, Izz);
   V3F rate_error = pqrCmd - pqr;
   momentCmd = MOI * (kpPQR * rate_error); 
@@ -107,6 +107,7 @@ V3F QuadControl::BodyRateControl(V3F pqrCmd, V3F pqr)
  - Implemented the code in the function `RollPitchControl()`
 ```c++
 V3F QuadControl::RollPitchControl(V3F accelCmd, Quaternion<float> attitude, float collThrustCmd)
+{
   V3F pqrCmd;
   Mat3x3F R = attitude.RotationMatrix_IwrtB();
 
