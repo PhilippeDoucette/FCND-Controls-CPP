@@ -243,9 +243,9 @@ float QuadControl::YawControl(float yawCmd, float yaw)
 
 ### Extra Challenge 1 (Optional) ###
 
-You will notice that initially these two trajectories are the same. Let's work on improving some performance of the trajectory itself.
+`You will notice that initially these two trajectories are the same. Let's work on improving some performance of the trajectory itself.
 
-`1. Inspect the python script `traj/MakePeriodicTrajectory.py`.  Can you figure out a way to generate a trajectory that has velocity (not just position) information?`
+1. Inspect the python script ``traj/MakePeriodicTrajectory.py``.  Can you figure out a way to generate a trajectory that has velocity (not just position) information?`
 
 In the function `LateralPositionControl`, I added `velCmd.x` and `velCmd.`y to the end of these lines...
 
@@ -253,16 +253,16 @@ In the function `LateralPositionControl`, I added `velCmd.x` and `velCmd.`y to t
   velCmd.x = kpPosXY * (posCmd.x - pos.x) + velCmd.x;
   velCmd.y = kpPosXY * (posCmd.y - pos.y) + velCmd.y;
 ```
-
 ... so that the velCmd can take advangage of the `curTrajPoint.velocity` from the call statement:
 ```c++
   LateralPositionControl(curTrajPoint.position, curTrajPoint.velocity, estPos, estVel, curTrajPoint.accel);
 ```
 
+
 `2. Generate a new `FigureEightFF.txt` that has velocity terms
 Did the velocity-specified trajectory make a difference? Why?`
 
-With the two different trajectories, your drones' motions should look like this:
+I wa
 
 <p align="center">
 <img src="animations/scenario5.jpg" width="500"/>
