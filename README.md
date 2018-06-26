@@ -249,8 +249,6 @@ float QuadControl::YawControl(float yawCmd, float yaw)
 
 The code could be modified to return velocity by simply remembering x,y,z from prior loop iterations and calculating dx, dy, dz and calculating velocities using dt.   Like this: vel.x = (prior_x - x) * dt.
 
-In the function `LateralPositionControl`, I added `velCmd.x` and `velCmd.`y to the end of these lines...
-
 The trajectory used in Quad 2 contains `curTrajPoint` of datatype `TrajectoryPoint` defined as follows:
 ```c++
   TrajectoryPoint() :
@@ -268,14 +266,13 @@ So it already had velocity data in it.  I mearly added it to the velocity comman
 ```
 ... so that the velCmd can take advangage of the `curTrajPoint.velocity` from the call statement:
 ```c++
-  LateralPositionControl(curTrajPoint.position, ***curTrajPoint.velocity***, estPos, estVel, curTrajPoint.accel);
+  LateralPositionControl(curTrajPoint.position, curTrajPoint.velocity, estPos, estVel, curTrajPoint.accel);
 ```
-
 
 `2. Generate a new `FigureEightFF.txt` that has velocity terms
 Did the velocity-specified trajectory make a difference? Why?`
 
-
+Yes, it made a huge difference.  The quad was not able to track trajectory closer then about 1/2 meter, no matter how I adjusted the parameters.  Adding the trajectory velocity to the command enabled very close tracking, within the performance criteria.
 
 <p align="center">
 <img src="animations/scenario5.jpg" width="500"/>
@@ -284,10 +281,11 @@ Did the velocity-specified trajectory make a difference? Why?`
 
 ### Extra Challenge 2 (Optional) ###
 
-For flying a trajectory, is there a way to provide even more information for even better tracking?
+`For flying a trajectory, is there a way to provide even more information for even better tracking?
 
-How about trying to fly this trajectory as quickly as possible (but within following threshold)!
+How about trying to fly this trajectory as quickly as possible (but within following threshold)!`
 
+Yes.  Adding acceleration to the trajectories would give the PID controller a sort of warning about what is comming next.  Adding this value could be used to adjust quad acceleration and prevent overshoot.
 
 ### Performance Metrics ###
 
