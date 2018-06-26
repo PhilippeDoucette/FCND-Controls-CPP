@@ -6,19 +6,19 @@ Submission for the FCND-Controls-CPP project for Philippe Doucette.
 
 The following files were modified:
 
-src/QuadControl.cpp
+`src/QuadControl.cpp`
  Primary source code for PID controller
  
-src/QuadControl.h
+`src/QuadControl.h`
  Minor modifications, adding variable declarations used in debug and testing code
 
-config/QuadControlParams.txt
+`config/QuadControlParams.txt`
  Tuned parameters for PID controller
  
-config/6_Vertical.txt and 7_Horizontal.txt
+`config/6_Vertical.txt` and `7_Horizontal.txt`
  Additional Scenarios used to fine tune the controller parameters (Try them!)
 
-config/Scenarios.txt
+`config/Scenarios.txt`
  List of scenarios that populates the right-click popup menu.  6 and 7 were added.
  
 ### The Code ###
