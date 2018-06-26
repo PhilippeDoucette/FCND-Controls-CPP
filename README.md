@@ -63,42 +63,42 @@ Implemented the body rate and roll / pitch control.
 
  - implemented the code in the function `GenerateMotorCommands()`
 ```c++
-    VehicleCommand QuadControl::GenerateMotorCommands(float collThrustCmd, V3F momentCmd)
+VehicleCommand QuadControl::GenerateMotorCommands(float collThrustCmd, V3F momentCmd)
+{
+  float l = L / (float)sqrt(2);
 
-    float l = L / (float)sqrt(2);
+  float tau_x = momentCmd.x / l;
+  float tau_y = momentCmd.y / l;
+  float tau_z = momentCmd.z / -kappa;
 
-    float tau_x = momentCmd.x / l;
-    float tau_y = momentCmd.y / l;
-    float tau_z = momentCmd.z / -kappa;
+  float thrust_1 = (collThrustCmd + tau_x + tau_y + tau_z) / 4; // front left
+  float thrust_2 = (collThrustCmd - tau_x + tau_y - tau_z) / 4; // front right
+  float thrust_3 = (collThrustCmd + tau_x - tau_y - tau_z) / 4; // rear left These last two may be backwards
+  float thrust_4 = (collThrustCmd - tau_x - tau_y + tau_z) / 4; // rear right
 
-    float thrust_1 = (collThrustCmd + tau_x + tau_y + tau_z) / 4; // front left
-    float thrust_2 = (collThrustCmd - tau_x + tau_y - tau_z) / 4; // front right
-    float thrust_3 = (collThrustCmd + tau_x - tau_y - tau_z) / 4; // rear left These last two may be backwards
-    float thrust_4 = (collThrustCmd - tau_x - tau_y + tau_z) / 4; // rear right
+  cmd.desiredThrustsN[0] = thrust_1; // front left
+  cmd.desiredThrustsN[1] = thrust_2; // front right
+  cmd.desiredThrustsN[2] = thrust_3; // rear left
+  cmd.desiredThrustsN[3] = thrust_4; // rear right
 
-    cmd.desiredThrustsN[0] = thrust_1; // front left
-    cmd.desiredThrustsN[1] = thrust_2; // front right
-    cmd.desiredThrustsN[2] = thrust_3; // rear left
-    cmd.desiredThrustsN[3] = thrust_4; // rear right
-
-    //cmd.desiredThrustsN[0] = mass * 9.81f / 4.f; // front left
-    //cmd.desiredThrustsN[1] = mass * 9.81f / 4.f; // front right
-    //cmd.desiredThrustsN[2] = mass * 9.81f / 4.f; // rear left
-    //cmd.desiredThrustsN[3] = mass * 9.81f / 4.f; // rear right
+  //cmd.desiredThrustsN[0] = mass * 9.81f / 4.f; // front left
+  //cmd.desiredThrustsN[1] = mass * 9.81f / 4.f; // front right
+  //cmd.desiredThrustsN[2] = mass * 9.81f / 4.f; // rear left
+  //cmd.desiredThrustsN[3] = mass * 9.81f / 4.f; // rear right
     
-    return cmd;
+  return cmd;
+}
 ```
  - implement the code in the function `BodyRateControl()`
 ```c++
- V3F QuadControl::BodyRateControl(V3F pqrCmd, V3F pqr)
+V3F QuadControl::BodyRateControl(V3F pqrCmd, V3F pqr)
  
-   V3F MOI = (Ixx, Iyy, Izz);
- 
+  V3F MOI = (Ixx, Iyy, Izz);
   V3F rate_error = pqrCmd - pqr;
-
   momentCmd = MOI * (kpPQR * rate_error); 
   
   return momentCmd; 
+}
   ```
  
  - Tuned `kpPQR` in `QuadControlParams.txt` to get the vehicle to stop spinning quickly but not overshoot
