@@ -131,7 +131,7 @@ Successful, as the quad leveled itself, and the vehicle angle (Roll) gets contro
 
 ### Position/velocity and yaw angle control (scenario 3) ###
 
- - Implemented the code in the function `LateralPositionControl()`
+ - Implemented the code in the function `LateralPositionControl()` velCmd.x and velCmd was added to assignment later (see below).
  ```c++
  V3F QuadControl::LateralPositionControl(V3F posCmd, V3F velCmd, V3F pos, V3F vel, V3F accelCmdFF)
 {
@@ -165,7 +165,7 @@ Successful, as the quad leveled itself, and the vehicle angle (Roll) gets contro
   return accelCmd;
 } 
 ```
- - Implemented the code in the function `AltitudeControl()`
+ - Implemented the code in the function `AltitudeControl()`.  The integratedAltitudeError values was added later in scenario 4.
 ```c++
 float QuadControl::AltitudeControl(float posZCmd, float velZCmd, float posZ, float velZ, Quaternion<float> attitude, float accelZCmd, float dt)float QuadControl::AltitudeControl(float posZCmd, float velZCmd, float posZ, float velZ, Quaternion<float> attitude, float accelZCmd, float dt)
 {
@@ -225,19 +225,19 @@ float QuadControl::YawControl(float yawCmd, float yaw)
 
 ### Non-idealities and robustness (scenario 4) ###
 
-In this part, we will explore some of the non-idealities and robustness of a controller.  For this simulation, we will use `Scenario 4`.  This is a configuration with 3 quads that are all are trying to move one meter forward.  However, this time, these quads are all a bit different:
- - The green quad has its center of mass shifted back
- - The orange vehicle is an ideal quad
- - The red vehicle is heavier than usual
+1. Ran controller & parameter set from Step 3.  Had to tweak the controller parameters to work for all 3.  Also used `7_Horizontal.txt`.
 
-1. Run your controller & parameter set from Step 3.  Do all the quads seem to be moving OK?  If not, try to tweak the controller parameters to work for all 3 (tip: relax the controller).
+2. Edited `AltitudeControl()` to add basic integral control to help with the different-mass vehicle.
 
-2. Edit `AltitudeControl()` to add basic integral control to help with the different-mass vehicle.
+```c++
+  integratedAltitudeError += (posZCmd - posZ) * dt;
+  accelZCmd = kpVelZ * (velZCmd - velZ) + KiPosZ * integratedAltitudeError + accelZCmd;
+```
 
-3. Tune the integral control, and other control parameters until all the quads successfully move properly.  Your drones' motion should look like this:
+3. Tuned the integral control, and other control parameters until all the quads successfully moved properly.  
 
 <p align="center">
-<img src="animations/scenario4.gif" width="500"/>
+<img src="animations/scenario4.jpg" width="500"/>
 </p>
 
 
@@ -245,10 +245,22 @@ In this part, we will explore some of the non-idealities and robustness of a con
 
 You will notice that initially these two trajectories are the same. Let's work on improving some performance of the trajectory itself.
 
-1. Inspect the python script `traj/MakePeriodicTrajectory.py`.  Can you figure out a way to generate a trajectory that has velocity (not just position) information?
+`1. Inspect the python script `traj/MakePeriodicTrajectory.py`.  Can you figure out a way to generate a trajectory that has velocity (not just position) information?`
 
-2. Generate a new `FigureEightFF.txt` that has velocity terms
-Did the velocity-specified trajectory make a difference? Why?
+In the function `LateralPositionControl`, I added `velCmd.x` and `velCmd.`y to the end of these lines...
+
+```c++
+  velCmd.x = kpPosXY * (posCmd.x - pos.x) + velCmd.x;
+  velCmd.y = kpPosXY * (posCmd.y - pos.y) + velCmd.y;
+```
+
+... so that the velCmd can take advangage of the `curTrajPoint.velocity` from the call statement:
+```c++
+  LateralPositionControl(curTrajPoint.position, curTrajPoint.velocity, estPos, estVel, curTrajPoint.accel);
+```
+
+`2. Generate a new `FigureEightFF.txt` that has velocity terms
+Did the velocity-specified trajectory make a difference? Why?`
 
 With the two different trajectories, your drones' motions should look like this:
 
