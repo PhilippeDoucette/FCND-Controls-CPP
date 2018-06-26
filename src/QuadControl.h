@@ -48,4 +48,8 @@ public:
 
   // integral control
   float integratedAltitudeError;
+
+  bool printed;
+  int quadNumber;
+  float maxX;
 };
