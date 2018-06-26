@@ -281,9 +281,9 @@ Yes, it made a huge difference.  The quad was not able to track trajectory close
 
 ### Extra Challenge 2 (Optional) ###
 
-`For flying a trajectory, is there a way to provide even more information for even better tracking?
+"For flying a trajectory, is there a way to provide even more information for even better tracking?
 
-How about trying to fly this trajectory as quickly as possible (but within following threshold)!`
+How about trying to fly this trajectory as quickly as possible (but within following threshold)!"
 
 Yes.  Adding acceleration to the trajectories would give the PID controller a sort of warning about what is comming next.  Adding this value could be used to adjust quad acceleration and prevent overshoot.
 
