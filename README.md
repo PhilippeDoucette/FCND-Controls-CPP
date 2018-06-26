@@ -200,24 +200,23 @@ Similarly, I wrote `7_Horizontal.txt` to tune `kpPosXY` and  `kpVelXY`.  However
 At this point in scenario 3, without yaw control, one quad remained rotated in yaw.
 
  - Implement the code in the function `YawControl()`
- ```c++
+```c++
 float QuadControl::YawControl(float yawCmd, float yaw)
 {
   float yawRateCmd = 0;
    
- 	float PI = (float)M_PI;
+  float PI = (float)M_PI;
   yawCmd = fmodf(yawCmd, 2.f * PI);
   float yawRateError = yawCmd - yaw;
 
   if (yawRateError > M_PI)
-		  yawRateError = yawRateError - 2.f*PI;
+    yawRateError = yawRateError - 2.f*PI;
   else if(yawRateError < -M_PI)
-		  yawRateError = yawRateError + 2.f*PI;
+    yawRateError = yawRateError + 2.f*PI;
 
-	 yawRateCmd= kpYaw * yawRateError;
+  yawRateCmd= kpYaw * yawRateError;
 }
- 
- ```
+```
  - Tuned parameters `kpYaw` and the 3rd (z) component of `kpPQR`
 
 <p align="center">
