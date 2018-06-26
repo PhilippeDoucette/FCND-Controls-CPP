@@ -29,7 +29,7 @@ I tuned `QuadControlParams.txt` while writing the controller code and running sc
 
 I wrote two additional scenarios to help me tune the PID controller: 
  `6_Vertical.txt` flies the quads straight up and down (by modifying the start/end trajectories).  I could then examine the overshoot and tune the kpVelZ parameter.  
- `7_Horizontal.txt` is really just a drastic version of `4_Nonidealities` that I could modify for my own needs without polluting scenario 
+ `7_Horizontal.txt` is really just a drastic version of `4_Nonidealities` that I could modify for my own needs without polluting the pass/fail scenario.
 
 
 ### The Simulator ###
