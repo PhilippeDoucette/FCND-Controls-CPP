@@ -10,7 +10,6 @@ UseIdealEstimator=1
 
 # Physical properties
 Mass = 0.5
-
 L = 0.17
 Ixx = 0.0023
 Iyy = 0.0023
@@ -22,9 +21,7 @@ maxMotorThrust = 4.5
 # The ratio of kpV / kpP should be 4.
 
 # Position control gains
-
 kpPosXY = 4
-
 	# 1.9 2 to 4
 kpPosZ = 3 
 	# 3 # from 2 max 4
@@ -36,16 +33,17 @@ kpVelXY = 16
 	# 7.6 # from 8 max 16
 kpVelZ = 12
 	# 12
+
 # Angle control gains
 kpBank =17
 	# 15  # from 10 max 20
 kpYaw = 3
 	# 3 # From 2 to 4
+
 # Angle rate gains
 kpPQR = 29, 29, 10 
 	# PQ from 46 to 92
 	# R from 10 to 20
-
 
 # limits
 maxAscentRate = 5 
