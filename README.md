@@ -62,7 +62,7 @@ Implemented the body rate and roll / pitch control.
 **Implemented body rate control**
 
  - implemented the code in the function `GenerateMotorCommands()`
- '''c++
+```c++
     VehicleCommand QuadControl::GenerateMotorCommands(float collThrustCmd, V3F momentCmd)
 
     float l = L / (float)sqrt(2);
@@ -87,7 +87,7 @@ Implemented the body rate and roll / pitch control.
     //cmd.desiredThrustsN[3] = mass * 9.81f / 4.f; // rear right
     
     return cmd;
- '''
+```
  - implement the code in the function `BodyRateControl()`
  V3F QuadControl::BodyRateControl(V3F pqrCmd, V3F pqr)
  
