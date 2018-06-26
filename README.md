@@ -60,7 +60,7 @@ Note: if you want to come back to this later, this scenario is "1_Intro".
 With the proper mass, your simulation should look a little like this:
 
 <p align="center">
-<img src="animations/scenario1.gif" width="500"/>
+<img src="animations/scenario1.jpg" width="500"/>
 </p>
 
 
