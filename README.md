@@ -44,7 +44,7 @@ The thrusts are simply being set to:
 QuadControlParams.Mass * 9.81 / 4
 ```
 
-I tuned the `Mass` parameter in `QuadControlParams.txt` to make the vehicle more or less stay in the same spot.
+I tuned the `Mass = 0.5` parameter in `QuadControlParams.txt` to make the vehicle more or less stay in the same spot.
 
 With the proper mass, the simulation looked like this:
 
@@ -56,27 +56,29 @@ This code was later commented out and replaced with controller code.
 
 ### Body rate and roll/pitch control (scenario 2) ###
 
-First, you will implement the body rate and roll / pitch control.  For the simulation, you will use `Scenario 2`.  In this scenario, you will see a quad above the origin.  It is created with a small initial rotation speed about its roll axis.  Your controller will need to stabilize the rotational motion and bring the vehicle back to level attitude.
+Implemented the body rate and roll / pitch control. 
 
-To accomplish this, you will:
 
-1. Implement body rate control
+1. Implemented body rate control
 
- - implement the code in the function `GenerateMotorCommands()`
+ - implemented the code in the function `GenerateMotorCommands()`
+ 
+ 
+ 
  - implement the code in the function `BodyRateControl()`
- - Tune `kpPQR` in `QuadControlParams.txt` to get the vehicle to stop spinning quickly but not overshoot
+ 
+ 
+ 
+ - Tuned `kpPQR` in `QuadControlParams.txt` to get the vehicle to stop spinning quickly but not overshoot
 
-If successful, you should see the rotation of the vehicle about roll (omega.x) get controlled to 0 while other rates remain zero.  Note that the vehicle will keep flying off quite quickly, since the angle is not yet being controlled back to 0.  Also note that some overshoot will happen due to motor dynamics!.
 
-If you come back to this step after the next step, you can try tuning just the body rate omega (without the outside angle controller) by setting `QuadControlParams.kpBank = 0`.
 
 2. Implement roll / pitch control
-We won't be worrying about yaw just yet.
 
- - implement the code in the function `RollPitchControl()`
- - Tune `kpBank` in `QuadControlParams.txt` to minimize settling time but avoid too much overshoot
+ - implemented the code in the function `RollPitchControl()`
+ - Tuned `kpBank` in `QuadControlParams.txt` to minimize settling time but avoid too much overshoot
 
-If successful you should now see the quad level itself (as shown below), though it’ll still be flying away slowly since we’re not controlling velocity/position!  You should also see the vehicle angle (Roll) get controlled to 0.
+Successful, as the quad leveled itself, though it’ll still be flying away slowly since we’re not controlling velocity/position!  The vehicle angle (Roll) gets controlled to 0.
 
 <p align="center">
 <img src="animations/scenario2.jpg" width="500"/>
