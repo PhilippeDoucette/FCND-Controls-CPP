@@ -23,13 +23,13 @@ The following files were modified:
  
 ### The Code ###
 
-For the project, the majority of my code modifications are in `src/QuadControl.cpp`.  I added a few variables to `src/QuadControl.h` that I used for debugging and tuning.
+For the project, the majority of my code modifications are in `QuadControl.cpp`.  I added a few variables to `QuadControl.h` that I used for debugging and tuning.
 
 I tuned `QuadControlParams.txt` while writing the controller code and running scenarios.
 
-The syntax of the config files is as follows:
-
-I wrote two additional scenarios to help me tune the PID controller. '6_Vertical.txt' flies the quads straight up and down (by modifying the start/end trajectories).  I could then examine the overshoot and tune the kpVelZ parameter.  7_Horizontal.txt is really just a drastic version of '4_Nonidealities' that I could modify for my own needs without polluting scenario 4.
+I wrote two additional scenarios to help me tune the PID controller: 
+ `6_Vertical.txt` flies the quads straight up and down (by modifying the start/end trajectories).  I could then examine the overshoot and tune the kpVelZ parameter.  
+ `7_Horizontal.txt` is really just a drastic version of `4_Nonidealities` that I could modify for my own needs without polluting scenario 
 
 
 ### The Simulator ###
