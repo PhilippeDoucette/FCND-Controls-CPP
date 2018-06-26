@@ -247,22 +247,35 @@ float QuadControl::YawControl(float yawCmd, float yaw)
 
 1. Inspect the python script ``traj/MakePeriodicTrajectory.py``.  Can you figure out a way to generate a trajectory that has velocity (not just position) information?`
 
+The code could be modified to return velocity by simply remembering x,y,z from prior loop iterations and calculating dx, dy, dz and calculating velocities using dt.   Like this: vel.x = (prior_x - x) * dt.
+
 In the function `LateralPositionControl`, I added `velCmd.x` and `velCmd.`y to the end of these lines...
 
+The trajectory used in Quad 2 contains `curTrajPoint` of datatype `TrajectoryPoint` defined as follows:
+```c++
+  TrajectoryPoint() :
+    time(0.f),
+    position(0.f, 0.f, 0.f),
+    velocity(0.f, 0.f, 0.f),
+    omega(0.f, 0.f, 0.f),
+    attitude(0.f, 0.f, 0.f, 0.f)
+  {
+```
+So it already had velocity data in it.  I mearly added it to the velocity command computation in `LateralPositionControl`:
 ```c++
   velCmd.x = kpPosXY * (posCmd.x - pos.x) + velCmd.x;
   velCmd.y = kpPosXY * (posCmd.y - pos.y) + velCmd.y;
 ```
 ... so that the velCmd can take advangage of the `curTrajPoint.velocity` from the call statement:
 ```c++
-  LateralPositionControl(curTrajPoint.position, curTrajPoint.velocity, estPos, estVel, curTrajPoint.accel);
+  LateralPositionControl(curTrajPoint.position, ***curTrajPoint.velocity***, estPos, estVel, curTrajPoint.accel);
 ```
 
 
 `2. Generate a new `FigureEightFF.txt` that has velocity terms
 Did the velocity-specified trajectory make a difference? Why?`
 
-I wa
+
 
 <p align="center">
 <img src="animations/scenario5.jpg" width="500"/>
