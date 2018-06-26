@@ -34,7 +34,7 @@ I wrote two additional scenarios to help me tune the PID controller:
 
 ### The Simulator ###
 
-The `config/Scenarios.txt` was modified to add two additional Scenarios used to fine tune the controller parameters.  I found it difficult to tune the vertical parameters with the scenarios supplied.
+The `config/Scenarios.txt` was modified to add two additional scenarios used to fine tune the controller parameters.  I found it difficult to tune the vertical parameters with the scenarios supplied.
 
 ### Testing it Out (scenario 1) ###
 
