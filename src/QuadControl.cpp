@@ -73,13 +73,6 @@ VehicleCommand QuadControl::GenerateMotorCommands(float collThrustCmd, V3F momen
   // You'll need the arm length parameter L, and the drag/thrust ratio kappa
 
   ////////////////////////////// BEGIN STUDENT CODE ///////////////////////////
-	//float u_bar_p = momentCmd.x / Ixx;
-	//float u_bar_q = momentCmd.y / Iyy;
-	//float u_bar_r = momentCmd.z / Izz;
-
-	//float c_bar = collThrustCmd //  where is kf? 
-		// tau_z = (-F0 + F1 + F2 - F3) * kappa     // This is Yaw
-		//Where F0 is front left, F1 front right, F2 rear left and F3 rear right
 
   float l = L / (float)sqrt(2);
 
