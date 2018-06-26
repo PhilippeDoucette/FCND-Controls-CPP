@@ -1,108 +1,35 @@
-# The C++ Project Readme #
+# FCND-Controls-CPP project Submission #
 
-This is the readme for the C++ project.
+Submission for the FCND-Controls-CPP project for Philippe Doucette.
 
-For easy navigation throughout this document, here is an outline:
+### Files Modified and Added ###
 
- - [Development environment setup](#development-environment-setup)
- - [Simulator walkthrough](#simulator-walkthrough)
- - [The tasks](#the-tasks)
- - [Evaluation](#evaluation)
+The following files were modified:
 
+src/QuadControl.cpp
+ Primary source code for PID controller
+ 
+src/QuadControl.h
+ Minor modifications, adding variable declarations used in debug and testing code
 
-## Development Environment Setup ##
+config/QuadControlParams.txt
+ Tuned parameters for PID controller
+ 
+config/6_Vertical.txt and 7_Horizontal.txt
+ Additional Scenarios used to fine tune the controller parameters (Try them!)
 
-Regardless of your development platform, the first step is to download or clone this repository.
-
-Once you have the code for the simulator, you will need to install the necessary compiler and IDE necessary for running the simulator.
-
-Here are the setup and install instructions for each of the recommended IDEs for each different OS options:
-
-### Windows ###
-
-For Windows, the recommended IDE is Visual Studio.  Here are the steps required for getting the project up and running using Visual Studio.
-
-1. Download and install [Visual Studio](https://www.visualstudio.com/vs/community/)
-2. Select *Open Project / Solution* and open `<simulator>/project/Simulator.sln`
-3. From the *Project* menu, select the *Retarget solution* option and select the Windows SDK that is installed on your computer (this should have been installed when installing Visual Studio or upon opening of the project).
-4. Make sure platform matches the flavor of Windows you are using (x86 or x64). The platform is visible next to the green play button in the Visual Studio toolbar:
-
-![x64](x64.png)
-
-5. To compile and run the project / simulator, simply click on the green play button at the top of the screen.  When you run the simulator, you should see a single quadcopter, falling down.
-
-
-### OS X ###
-
-For Mac OS X, the recommended IDE is XCode, which you can get via the App Store.
-
-1. Download and install XCode from the App Store if you don't already have it installed.
-2. Open the project from the `<simulator>/project` directory.
-3. After opening project, you need to set the working directory:
-  1. Go to *(Project Name)* | *Edit Scheme*
-  2. In new window, under *Run/Debug* on left side, under the *Options* tab, set Working Directory to `$PROJECT_DIR` and check ‘use custom working directory’.
-  3. Compile and run the project. You should see a single quadcopter, falling down.
-
-
-### Linux ###
-
-For Linux, the recommended IDE is QtCreator.
-
-1. Download and install QtCreator.
-2. Open the `.pro` file from the `<simulator>/project` directory.
-3. Compile and run the project (using the tab `Build` select the `qmake` option.  You should see a single quadcopter, falling down.
-
-**NOTE:** You may need to install the GLUT libs using `sudo apt-get install freeglut3-dev`
-
-
-### Advanced Versions ###
-
-These are some more advanced setup instructions for those of you who prefer to use a different IDE or build the code manually.  Note that these instructions do assume a certain level of familiarity with the approach and are not as detailed as the instructions above.
-
-#### CLion IDE ####
-
-For those of you who are using the CLion IDE for developement on your platform, we have included the necessary `CMakeLists.txt` file needed to build the simulation.
-
-#### CMake on Linux ####
-
-For those of you interested in doing manual builds using `cmake`, we have provided a `CMakeLists.txt` file with the necessary configuration.
-
-**NOTE: This has only been tested on Ubuntu 16.04, however, these instructions should work for most linux versions.  Also note that these instructions assume knowledge of `cmake` and the required `cmake` dependencies are installed.**
-
-1. Create a new directory for the build files:
-
-```sh
-cd FCND-Controls-CPP
-mkdir build
-```
-
-2. Navigate to the build directory and run `cmake` and then compile and build the code:
-
-```sh
-cd build
-cmake ..
-make
-```
-
-3. You should now be able to run the simulator with `./CPPSim` and you should see a single quadcopter, falling down.
-
-## Simulator Walkthrough ##
-
-Now that you have all the code on your computer and the simulator running, let's walk through some of the elements of the code and the simulator itself.
-
+config/Scenarios.txt
+ List of scenarios that populates the right-click popup menu.  6 and 7 were added.
+ 
 ### The Code ###
 
-For the project, the majority of your code will be written in `src/QuadControl.cpp`.  This file contains all of the code for the controller that you will be developing.
+For the project, the majority of my code modifications are in `src/QuadControl.cpp`.  I added a few variables to `src/QuadControl.h` that I used for debugging and tuning.
 
-All the configuration files for your controller and the vehicle are in the `config` directory.  For example, for all your control gains and other desired tuning parameters, there is a config file called `QuadControlParams.txt` set up for you.  An import note is that while the simulator is running, you can edit this file in real time and see the affects your changes have on the quad!
+I tuned `QuadControlParams.txt` while writing the controller code and running scenarios.
 
 The syntax of the config files is as follows:
 
- - `[Quad]` begins a parameter namespace.  Any variable written afterwards becomes `Quad.<variablename>` in the source code.
- - If not in a namespace, you can also write `Quad.<variablename>` directly.
- - `[Quad1 : Quad]` means that the `Quad1` namespace is created with a copy of all the variables of `Quad`.  You can then overwrite those variables by specifying new values (e.g. `Quad1.Mass` to override the copied `Quad.Mass`).  This is convenient for having default values.
-
-You will also be using the simulator to fly some difference trajectories to test out the performance of your C++ implementation of your controller. These trajectories, along with supporting code, are found in the `traj` directory of the repo.
+I wrote two additional scenarios to help me tune the PID controller. '6_Vertical.txt' flies the quads straight up and down (by modifying the start/end trajectories).  I could then examine the overshoot and tune the kpVelZ parameter.  7_Horizontal.txt is really just a drastic version of '4_Nonidealities' that I could modify for my own needs without polluting scenario 4.
 
 
 ### The Simulator ###
@@ -116,20 +43,6 @@ Due to deterministic timing and careful control over how the pseudo-random numbe
 Vehicles are created and graphs are reset whenever a scenario is loaded. When a scenario is reset (due to an end condition such as time or user pressing the ‘R’ key), the config files are all re-read and state of the simulation/vehicles/graphs is reset -- however the number/name of vehicles and displayed graphs are left untouched.
 
 When the simulation is running, you can use the arrow keys on your keyboard to impact forces on your drone to see how your controller reacts to outside forces being applied.
-
-#### Keyboard / Mouse Controls ####
-
-There are a handful of keyboard / mouse commands to help with the simulator itself, including applying external forces on your drone to see how your controllers reacts!
-
- - Left drag - rotate
- - X + left drag - pan
- - Z + left drag - zoom
- - arrow keys - apply external force
- - C - clear all graphs
- - R - reset simulation
- - Space - pause simulation
-
-
 
 
 ### Testing it Out ###
@@ -233,15 +146,6 @@ In this part, we will explore some of the non-idealities and robustness of a con
 </p>
 
 
-### Tracking trajectories ###
-
-Now that we have all the working parts of a controller, you will put it all together and test it's performance once again on a trajectory.  For this simulation, you will use `Scenario 5`.  This scenario has two quadcopters:
- - the orange one is following `traj/FigureEight.txt`
- - the other one is following `traj/FigureEightFF.txt` - for now this is the same trajectory.  For those interested in seeing how you might be able to improve the performance of your drone by adjusting how the trajectory is defined, check out **Extra Challenge 1** below!
-
-How well is your drone able to follow the trajectory?  It is able to hold to the path fairly well?
-
-
 ### Extra Challenge 1 (Optional) ###
 
 You will notice that initially these two trajectories are the same. Let's work on improving some performance of the trajectory itself.
@@ -254,7 +158,7 @@ Did the velocity-specified trajectory make a difference? Why?
 With the two different trajectories, your drones' motions should look like this:
 
 <p align="center">
-<img src="animations/scenario5.gif" width="500"/>
+<img src="animations/scenario5.jpg" width="500"/>
 </p>
 
 
@@ -265,19 +169,9 @@ For flying a trajectory, is there a way to provide even more information for eve
 How about trying to fly this trajectory as quickly as possible (but within following threshold)!
 
 
-## Evaluation ##
-
-To assist with tuning of your controller, the simulator contains real time performance evaluation.  We have defined a set of performance metrics for each of the scenarios that your controllers must meet for a successful submission.
-
-There are two ways to view the output of the evaluation:
-
- - in the command line, at the end of each simulation loop, a **PASS** or a **FAIL** for each metric being evaluated in that simulation
- - on the plots, once your quad meets the metrics, you will see a green box appear on the plot notifying you of a **PASS**
-
-
 ### Performance Metrics ###
 
-The specific performance metrics are as follows:
+All performance metrics were accomplished:
 
  - scenario 2
    - roll should less than 0.025 radian of nominal for 0.75 seconds (3/4 of the duration of the loop)
@@ -293,7 +187,3 @@ The specific performance metrics are as follows:
 
  - scenario 5
    - position error of the quad should be less than 0.25 meters for at least 3 seconds
-
-## Authors ##
-
-Thanks to Fotokite for the initial development of the project code and simulator.
