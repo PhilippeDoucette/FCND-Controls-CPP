@@ -21,7 +21,7 @@ maxMotorThrust = 4.5
 # The ratio of kpV / kpP should be 4.
 
 # Position control gains
-kpPosXY = 4
+kpPosXY = 2
 	# 4 2 to 4
 kpPosZ = 6 
 	# 3 # from 2 max 4
@@ -35,7 +35,7 @@ kpVelZ = 8
 	# 12
 
 # Angle control gains
-kpBank =15
+kpBank = 15
 	# 17  # from 10 max 20
 kpYaw = 3
 	# 3 # From 2 to 4
