@@ -6,7 +6,7 @@ Revision for resubmittal:
 
 My prior submittle passed all tests on my computer, but again I missed copied some parameters to my subittal.
 
-Everything should pass now. I corrected 'QuadControlParams.txt' 
+Everything should pass now with the files submitted. I corrected 'QuadControlParams.txt' 
 
 ```
 SIMULATOR!
@@ -53,7 +53,6 @@ Simulation #15 (../config/5_TrajectoryFollow.txt)
 PASS: ABS(Quad2.PosFollowErr) was less than 0.250000 for at least 3.000000 seconds
 
 ```
-
 
 Everything that follows was reviewed previously and passed, including source code *******************************************************
 
