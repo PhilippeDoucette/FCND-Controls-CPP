@@ -4,7 +4,7 @@ Submission for the FCND-Controls-CPP project for Philippe Doucette.
 
 Revision for resubmittal:
 
-My prior submittle passed all tests on my computer, but again I missed copied some parameters to my subittal.
+My prior submittle passed all tests on my computer, but again I missed copied some parameters to my submittal.
 
 Everything should pass now with the files submitted. I corrected 'QuadControlParams.txt' 
 
